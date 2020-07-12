@@ -1,22 +1,35 @@
-﻿Function Import-ecorp
+##########################################################################
+#
+#		Script to add users in Organization Units
+#
+#	Author: Ícaro César
+#	
+#	What are you need: archive .cvs when name of users, e-mails,
+#	and others proprietes
+#
+#
+##########################################################################
+
+
+Function Import-(name_of_organization)
     {
     Param (
         [string] $OUName
         )
 
     $ExportName = "C:\DataFiles\"+$OUName+".csv"
-    $Location = "OU="+$OUName+",DC=ecorp,DC=com"
+    $Location = "OU="+$OUName+",DC=domain,DC=com"
 
-    New-ADOrganizationalUnit -Name $OUName -Path "DC=ecorp,DC=com" -ProtectedFromAccidentalDeletion $False
+    New-ADOrganizationalUnit -Name $OUName -Path "DC=domain,DC=com" -ProtectedFromAccidentalDeletion $False
 
-    $LCPassword = "D3f4u1t@01" | ConvertTo-SecureString -AsPlainText -Force
+    $LCPassword = "[Default-password]" | ConvertTo-SecureString -AsPlainText -Force
 
     Import-CSV $ExportName    |
     New-ADUser -Path $Location -AccountPassword $LCPassword -Enabled $TRUE
 
     }
 
-Import-ecorp -OUName TICSupport
-Import-ecorp -OUName E-CorpManagers
-Import-ecorp -OUName SalesMarketing
-Import-ecorp -OUName RoomService 
+Import-name_organization -OUName TICSupport
+Import-name_organization -OUName E-CorpManagers
+Import-name_organization -OUName SalesMarketing
+Import-name_organization -OUName RoomService 
